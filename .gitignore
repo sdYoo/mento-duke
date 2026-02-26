@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Environment
+.env
+
+# Logs
+logs/*.log
+
+# Data (keep structure, ignore outputs)
+data/*.csv
+data/*.md
+data/*.txt
+data/cookies.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Claude Code
+.claude/
+
+# Playwright
+playwright-report/
+test-results/
