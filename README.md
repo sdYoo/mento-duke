@@ -41,6 +41,42 @@ python3 main.py scrape --keywords "행정" --pages 3         # 행정직 3페이
 python3 main.py scrape --keywords "전산,IT" --headed       # 브라우저 표시
 ```
 
+### 축약 명령어 (`run.sh`)
+
+가상환경 활성화와 기본 옵션을 자동 처리하는 스크립트입니다.
+
+| 명령어 | 실행되는 내용 |
+|--------|--------------|
+| `./run.sh` | headless 모드로 스크래핑 (기본) |
+| `./run.sh login` | 네이버 로그인 및 쿠키 저장 |
+| `./run.sh today` | 오늘 올라온 공고만 필터 (headed) |
+| `./run.sh headed` | 브라우저 화면 표시하며 스크래핑 |
+
+```bash
+# 예시
+./run.sh              # headless 스크래핑
+./run.sh today        # 오늘 공고만 (headed)
+./run.sh headed       # 브라우저 표시
+./run.sh login        # 최초 로그인
+```
+
+### Shell Alias
+
+`~/.zshrc`에 아래 alias를 추가하면 어디서든 바로 실행할 수 있습니다.
+
+```bash
+# ~/.zshrc
+alias scrape='/path/to/mento-duke/run.sh'
+alias scrape-today='/path/to/mento-duke/run.sh today'
+alias scrape-login='/path/to/mento-duke/run.sh login'
+```
+
+| alias | 동작 |
+|-------|------|
+| `scrape` | headless 모드로 스크래핑 |
+| `scrape-today` | 오늘 공고만 필터 (headed) |
+| `scrape-login` | 네이버 로그인 및 쿠키 저장 |
+
 ---
 
 ## 대상 게시판
