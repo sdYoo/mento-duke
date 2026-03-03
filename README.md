@@ -69,7 +69,7 @@ $ python3 main.py scrape --keywords "전산,IT" --today
 ### 1. 저장소 클론
 
 ```bash
-git clone https://github.com/<your-username>/mento-duke.git
+git clone https://github.com/sdYoo/mento-duke.git
 cd mento-duke
 ```
 
