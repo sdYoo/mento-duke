@@ -20,8 +20,6 @@ class Settings(BaseSettings):
         request_delay: Seconds to wait between HTTP requests.
         headless: Run Playwright browser in headless mode.
         cookies_path: Path to saved browser cookies JSON.
-        output_md: Path for Markdown output file.
-        output_csv: Path for CSV output file.
 
     Returns:
         Settings instance with validated configuration values.
@@ -50,16 +48,6 @@ class Settings(BaseSettings):
     def cookies_path(self) -> Path:
         """Path to the saved cookies JSON file."""
         return DATA_DIR / "cookies.json"
-
-    @property
-    def output_md(self) -> Path:
-        """Path for Markdown results output."""
-        return DATA_DIR / "results.md"
-
-    @property
-    def output_csv(self) -> Path:
-        """Path for CSV results output."""
-        return DATA_DIR / "results.csv"
 
     @property
     def cafe_url(self) -> str:

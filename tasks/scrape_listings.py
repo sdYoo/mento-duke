@@ -37,10 +37,13 @@ async def scrape_board_listings(
     pages = pages or settings.scrape_pages
     keywords = keywords or [settings.keyword]
 
-    # Extract cookies from context for httpx
+    # Extract only required auth cookies from context for httpx
+    required_names = {"NID_AUT", "NID_SES"}
     cookies = await context.cookies()
     cookie_header = "; ".join(
-        f"{c['name']}={c['value']}" for c in cookies
+        f"{c['name']}={c['value']}"
+        for c in cookies
+        if c["name"] in required_names
     )
 
     articles = await _fetch_via_api(
@@ -85,9 +88,9 @@ async def _fetch_via_api(
         "Cookie": cookie_header,
         "Referer": f"https://cafe.naver.com/{settings.cafe_id}",
         "User-Agent": (
-            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
             "AppleWebKit/537.36 (KHTML, like Gecko) "
-            "Chrome/120.0.0.0 Safari/537.36"
+            "Chrome/131.0.0.0 Safari/537.36"
         ),
     }
 

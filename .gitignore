@@ -36,7 +36,12 @@ Thumbs.db
 
 # Claude Code
 .claude/
+.omc/
 
 # Playwright
 playwright-report/
 test-results/
+
+# PRD / internal docs
+naver_cafe_scraper_prd.md
+claude.md

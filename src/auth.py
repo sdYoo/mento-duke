@@ -62,7 +62,7 @@ async def login_and_save_cookies(
     # Save storage state
     cookies_path.parent.mkdir(parents=True, exist_ok=True)
     await context.storage_state(path=str(cookies_path))
-    logger.success(f"쿠키가 저장되었습니다: {cookies_path}")
+    logger.success(f"쿠키가 저장되었습니다: {cookies_path.relative_to(cookies_path.parent.parent)}")
 
     await browser.close()
 

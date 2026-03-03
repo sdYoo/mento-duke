@@ -13,6 +13,9 @@ case "${1:-scrape}" in
   headed)
     python3 main.py scrape --keywords "전산,IT" --headed
     ;;
+  range)
+    python3 main.py scrape --keywords "전산,IT" --from "$2" --to "$3" --headed
+    ;;
   *)
     python3 main.py scrape --keywords "전산,IT"
     ;;
