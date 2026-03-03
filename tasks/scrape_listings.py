@@ -136,9 +136,8 @@ async def _fetch_via_api(
                     article_id=article_id,
                     title=title,
                     board_category=board.category,
-                    writer=item.get("nickName", ""),
-                    write_date=item.get("writeDateText", ""),
-                    write_timestamp=item.get("addDate", 0),
+                    writer=item.get("writerNickname", ""),
+                    write_timestamp=item.get("writeDateTimestamp", 0),
                     link=(
                         f"https://cafe.naver.com/{settings.cafe_id}"
                         f"/{article_id}"

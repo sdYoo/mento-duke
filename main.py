@@ -201,15 +201,6 @@ async def _scrape(
 
             logger.info(f"총 {len(all_articles)}건 게시글 수집")
 
-            # Debug: show sample timestamp values
-            if all_articles:
-                sample = all_articles[0]
-                logger.debug(
-                    f"[샘플] title={sample.title[:30]}, "
-                    f"timestamp={sample.write_timestamp}, "
-                    f"write_date='{sample.write_date}'"
-                )
-
             # Filter by date range or today
             if use_date_range:
                 all_articles = _filter_date_range(
@@ -317,10 +308,11 @@ def _parse_article_date(
     kst: timezone,
     today_kst: date,
 ) -> date | None:
-    """Extract date from an article using timestamp or text fallback.
+    """Extract date from an article using write_date text first, then timestamp.
 
-    Tries epoch milliseconds first, then epoch seconds, with a
-    sanity check (year 2020-2030). Falls back to write_date text.
+    Prioritizes write_date text (what the user sees in the UI) over
+    raw timestamps, because the API timestamp may represent a
+    different date than what is displayed.
 
     Args:
         article: ArticleSummary object.
@@ -332,7 +324,26 @@ def _parse_article_date(
     """
     import re
 
-    # Method 1: Use timestamp if available
+    # Priority 1: Parse write_date text (most reliable — matches UI)
+    wd = article.write_date
+    if wd:
+        # Time-only formats → today (e.g. "08:26", "1시간 전")
+        if re.match(r"^\d{1,2}:\d{2}$", wd):
+            return today_kst
+        if "분 전" in wd or "시간 전" in wd or "방금" in wd:
+            return today_kst
+
+        # "2026.03.01." or "2026.03.01"
+        m = re.search(r"(\d{4})\.(\d{2})\.(\d{2})", wd)
+        if m:
+            return date(int(m.group(1)), int(m.group(2)), int(m.group(3)))
+
+        # "03.01." (no year → current year)
+        m = re.match(r"^(\d{2})\.(\d{2})\.?$", wd)
+        if m:
+            return date(today_kst.year, int(m.group(1)), int(m.group(2)))
+
+    # Priority 2: Use timestamp as fallback
     if article.write_timestamp > 0:
         ts = article.write_timestamp
 
@@ -351,31 +362,6 @@ def _parse_article_date(
                 return d
         except (OSError, OverflowError, ValueError):
             pass
-
-        logger.debug(
-            f"timestamp 해석 실패: {ts} (article_id={article.article_id})"
-        )
-
-    # Method 2: Parse write_date text
-    wd = article.write_date
-    if not wd:
-        return None
-
-    # "2026.03.01." or "2026.03.01"
-    m = re.search(r"(\d{4})\.(\d{2})\.(\d{2})", wd)
-    if m:
-        return date(int(m.group(1)), int(m.group(2)), int(m.group(3)))
-
-    # "03.01." (no year → current year)
-    m = re.match(r"^(\d{2})\.(\d{2})\.?$", wd)
-    if m:
-        return date(today_kst.year, int(m.group(1)), int(m.group(2)))
-
-    # Time-only formats → today
-    if re.match(r"^\d{1,2}:\d{2}$", wd):
-        return today_kst
-    if "분 전" in wd or "시간 전" in wd or "방금" in wd:
-        return today_kst
 
     return None
 
